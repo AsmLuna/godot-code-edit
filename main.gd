@@ -10,6 +10,8 @@ var has_opened_file: bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	has_opened_file = false
+	
 	var cmdline_args = OS.get_cmdline_args() as PackedStringArray
 	print(OS.get_cmdline_args())
 	
@@ -25,7 +27,6 @@ func _ready():
 		current_file = FileAccess.open(path, FileAccess.READ)
 		code_editor.text = current_file.get_as_text()
 		
-	has_opened_file = false
 
 func _on_open_pressed():
 	# Show open dialog
@@ -47,7 +48,7 @@ func _on_open_dialog_file_selected(path):
 	code_editor.text = current_file.get_as_text()
 
 func _on_new_pressed():
-	# Show the New dialog, this is different 
+	# Show the New dialog, this is different
 	# than the open dialog because it
 	# overrides existing files or creates new ones.
 	newDialog.show()
