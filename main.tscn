@@ -88,7 +88,9 @@ access = 2
 title = ""
 position = Vector2i(325, 240)
 size = Vector2i(467, 95)
+ok_button_text = "Yes"
 dialog_text = "You have unsaved changes, are you sure you want to quit?"
+cancel_button_text = "No"
 
 [connection signal="text_changed" from="CodeEdit" to="." method="_on_code_edit_text_changed"]
 [connection signal="pressed" from="HBoxContainer/save" to="." method="_on_save_pressed"]
