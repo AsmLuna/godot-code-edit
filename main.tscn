@@ -84,8 +84,17 @@ size = Vector2i(840, 467)
 ok_button_text = "Save"
 access = 2
 
+[node name="UnsavedChangesDialog" type="ConfirmationDialog" parent="."]
+title = ""
+position = Vector2i(325, 240)
+size = Vector2i(467, 95)
+dialog_text = "You have unsaved changes, are you sure you want to quit?"
+
+[connection signal="text_changed" from="CodeEdit" to="." method="_on_code_edit_text_changed"]
 [connection signal="pressed" from="HBoxContainer/save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="HBoxContainer/open" to="." method="_on_open_pressed"]
 [connection signal="pressed" from="HBoxContainer/new" to="." method="_on_new_pressed"]
 [connection signal="file_selected" from="openDialog" to="." method="_on_open_dialog_file_selected"]
 [connection signal="file_selected" from="newDialog" to="." method="_on_new_dialog_file_selected"]
+[connection signal="canceled" from="UnsavedChangesDialog" to="." method="_on_unsaved_changes_dialog_canceled"]
+[connection signal="confirmed" from="UnsavedChangesDialog" to="." method="_on_unsaved_changes_dialog_confirmed"]

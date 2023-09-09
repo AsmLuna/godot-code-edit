@@ -2,14 +2,24 @@ extends Control
 
 @onready var openDialog: FileDialog = $openDialog
 @onready var newDialog: FileDialog = $newDialog
+@onready var unsavedChangesDialog: ConfirmationDialog = $UnsavedChangesDialog
 @onready var code_editor: CodeEdit = $CodeEdit
 
 var current_file
 var current_path
 var has_opened_file: bool
+var has_unsaved_changes: bool
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if has_unsaved_changes:
+			unsavedChangesDialog.show()
+		else:
+			get_tree().quit()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	has_unsaved_changes = false
 	has_opened_file = false
 	
 	var cmdline_args = OS.get_cmdline_args() as PackedStringArray
@@ -26,7 +36,13 @@ func _ready():
 		current_path = path
 		current_file = FileAccess.open(path, FileAccess.READ)
 		code_editor.text = current_file.get_as_text()
-		
+
+func _process(delta):
+	# Set title
+	if has_unsaved_changes:
+		DisplayServer.window_set_title("godot-code-edit (unsaved changes!)")
+	else:
+		DisplayServer.window_set_title("godot-code-edit")
 
 func _on_open_pressed():
 	# Show open dialog
@@ -40,6 +56,8 @@ func _on_save_pressed():
 		current_file.store_string(code_editor.text)
 		
 		current_file = FileAccess.open(current_path, FileAccess.READ)
+		
+		has_unsaved_changes = false
 
 func _on_open_dialog_file_selected(path):
 	has_opened_file = true
@@ -59,3 +77,15 @@ func _on_new_dialog_file_selected(path):
 	current_file = FileAccess.open(path, FileAccess.WRITE)
 	current_file.store_string("")
 	code_editor.text = ""
+
+
+func _on_code_edit_text_changed():
+	has_unsaved_changes = true
+
+
+func _on_unsaved_changes_dialog_confirmed():
+	get_tree().quit()
+
+
+func _on_unsaved_changes_dialog_canceled():
+	unsavedChangesDialog.hide()
