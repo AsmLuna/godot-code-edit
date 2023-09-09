@@ -1,8 +1,0 @@
-ea4bc82a6ad023ab7ee23ee620429895
-::res://::1694232898
-background.jpg::CompressedTexture2D::7817131456082452603::1694048280::1694048281::1::::<><>::
-CodeEdit.gd::GDScript::-1::1694066529::0::1::::<>CodeEdit<>::
-icon.svg::CompressedTexture2D::3630483771122415886::1694044950::1694044955::1::::<><>::
-main.gd::GDScript::-1::1694066464::0::1::::<>Control<>::
-main.tscn::PackedScene::5271321513146697658::1694162682::0::1::::<><>::uid://teu20qwi31ko::::res://theme_file.tres<>res://main.gd<>res://CodeEdit.gd<>uid://djmxapalvkmf8::::res://background.jpg
-theme_file.tres::Theme::1343109435241641066::1694046673::0::1::::<><>::
