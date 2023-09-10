@@ -84,6 +84,12 @@ size = Vector2i(840, 467)
 ok_button_text = "Save"
 access = 2
 
+[node name="saveDialog" type="FileDialog" parent="."]
+position = Vector2i(215, 100)
+size = Vector2i(840, 467)
+ok_button_text = "Save"
+access = 2
+
 [node name="UnsavedChangesDialog" type="ConfirmationDialog" parent="."]
 title = ""
 position = Vector2i(325, 240)
@@ -98,5 +104,6 @@ cancel_button_text = "No"
 [connection signal="pressed" from="HBoxContainer/new" to="." method="_on_new_pressed"]
 [connection signal="file_selected" from="openDialog" to="." method="_on_open_dialog_file_selected"]
 [connection signal="file_selected" from="newDialog" to="." method="_on_new_dialog_file_selected"]
+[connection signal="file_selected" from="saveDialog" to="." method="_on_save_dialog_file_selected"]
 [connection signal="canceled" from="UnsavedChangesDialog" to="." method="_on_unsaved_changes_dialog_canceled"]
 [connection signal="confirmed" from="UnsavedChangesDialog" to="." method="_on_unsaved_changes_dialog_confirmed"]

@@ -2,6 +2,7 @@ extends Control
 
 @onready var openDialog: FileDialog = $openDialog
 @onready var newDialog: FileDialog = $newDialog
+@onready var saveDialog: FileDialog = $saveDialog
 @onready var unsavedChangesDialog: ConfirmationDialog = $UnsavedChangesDialog
 @onready var code_editor: CodeEdit = $CodeEdit
 
@@ -40,16 +41,22 @@ func _ready():
 func _process(delta):
 	# Set title
 	if has_unsaved_changes:
-		DisplayServer.window_set_title("godot-code-edit (unsaved changes!)")
+		if has_opened_file:
+			DisplayServer.window_set_title("godot-code-edit " + '"' + current_path + '"' + " (unsaved changes!)")
+		else:
+			DisplayServer.window_set_title("godot-code-edit (unsaved changes!)")
 	else:
-		DisplayServer.window_set_title("godot-code-edit")
+		if has_opened_file:
+			DisplayServer.window_set_title("godot-code-edit " + '"' + current_path + '"')
+		else:
+			DisplayServer.window_set_title("godot-code-edit")
 
 func _on_open_pressed():
 	# Show open dialog
 	openDialog.show()
 
 func _on_save_pressed():
-	if has_opened_file == true:
+	if has_opened_file:
 		current_file = FileAccess.open(current_path, FileAccess.WRITE)
 		
 		# Store the code_editor's node text variable into the current file
@@ -58,6 +65,10 @@ func _on_save_pressed():
 		current_file = FileAccess.open(current_path, FileAccess.READ)
 		
 		has_unsaved_changes = false
+	elif has_opened_file == false and has_unsaved_changes or has_opened_file == false:
+		# The save dialog is the same as the new dialog but instead it overwrites
+		# the selected file with the text inside code_editor.text.
+		saveDialog.show()
 
 func _on_open_dialog_file_selected(path):
 	has_opened_file = true
@@ -68,7 +79,7 @@ func _on_open_dialog_file_selected(path):
 func _on_new_pressed():
 	# Show the New dialog, this is different
 	# than the open dialog because it
-	# overrides existing files or creates new ones.
+	# overrides existing files or creates new ones.+
 	newDialog.show()
 
 func _on_new_dialog_file_selected(path):
@@ -89,3 +100,11 @@ func _on_unsaved_changes_dialog_confirmed():
 
 func _on_unsaved_changes_dialog_canceled():
 	unsavedChangesDialog.hide()
+
+func _on_save_dialog_file_selected(path):
+	has_opened_file = true
+	has_unsaved_changes = false
+	current_path = path
+	current_file = FileAccess.open(path, FileAccess.WRITE)
+	current_file.store_string(code_editor.text)
+	current_file = FileAccess.open(current_path, FileAccess.READ)
